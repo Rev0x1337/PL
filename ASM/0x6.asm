@@ -279,7 +279,7 @@ notequ:
 
 section '.idata' import data readable
 library kernel32,'kernel32.dll',msvcrt,'msvcrt.dll'
-import msvcrt,printf,'prontf',getch,'_getch',scanf,'scanf'
+import msvcrt,printf,'printf',getch,'_getch',scanf,'scanf'
 include '.\INCLUDE\api\kernel32.inc'
 
 	
