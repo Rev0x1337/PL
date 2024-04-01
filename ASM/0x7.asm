@@ -1,3 +1,4 @@
+;ret & call
 section .text
 
 	global _start
