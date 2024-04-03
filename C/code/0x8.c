@@ -5,7 +5,7 @@
 void encryptFile(FILE* inputFile, FILE* outputFile, int key) {
     char ch;
     while ((ch = fgetc(inputFile)) != EOF) {
-        ch = ch ^ key; // XOR операция для шифрования
+        ch = ch ^ key; 
         fputc(ch, outputFile);
     }
 }
@@ -15,37 +15,36 @@ int main() {
     char inputFileName[100], outputFileName[100];
     int key;
 
-    // Генерация случайного ключа
+    
     srand(time(NULL));
-    key = rand() % 256; // Генерация случайного числа от 0 до 255
+    key = rand() % 256; 
 
-    printf("Сгенерированный ключ: %d\n", key);
+    printf("Key: %d\n", key);
 
-    printf("Введите имя файла для шифрования: ");
+    printf("Enter name file for encoding: ");
     scanf("%s", inputFileName);
 
-    printf("Введите имя файла для сохранения зашифрованного содержимого: ");
+    printf("Enter name encoding file: ");
     scanf("%s", outputFileName);
 
     inputFile = fopen(inputFileName, "rb");
     if (inputFile == NULL) {
-        printf("Ошибка открытия файла для чтения.\n");
+        printf("Error open file for reading.\n");
         return 1;
     }
 
     outputFile = fopen(outputFileName, "wb");
     if (outputFile == NULL) {
-        printf("Ошибка открытия файла для записи.\n");
+        printf("Error open file for writing.\n");
         return 1;
     }
 
     encryptFile(inputFile, outputFile, key);
 
-    printf("Файл успешно зашифрован с использованием случайного ключа.\n");
+    printf("File encoding.\n");
 
     fclose(inputFile);
     fclose(outputFile);
 
     return 0;
 }
-
