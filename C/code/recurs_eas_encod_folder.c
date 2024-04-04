@@ -57,10 +57,7 @@ void encryptDirectory(const char* directoryPath, const unsigned char* key) {
 }
 
 int main() {
-    const char* directoryPath = "testEncode"; // Укажите путь к папке, где находятся файлы для шифрования
-    unsigned char key[AES_BLOCK_SIZE] = "mysecretpassword"; // Ключ шифрования (16 байт)
-
-    encryptDirectory(directoryPath, key);
+    const char* directoryPath = "testEncode";igned char key[AES_BLOCK_SIZE] = "mysecretpassword";   encryptDirectory(directoryPath, key);
 
     return 0;
 }
