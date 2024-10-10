@@ -1,10 +1,6 @@
-;ïðîãðàììà client.asm
 .586P
-;ïëîñêàÿ ìîäåëü
 .MODEL FLAT, stdcall
-;êîíñòàíòû
 STD_OUTPUT_HANDLE equ -11
-;ïðîòîòèïû âíåøíèõ ïðîöåäóð
 EXTERN  connect@12:NEAR
 EXTERN  gethostbyname@4:NEAR
 EXTERN  shutdown@8:NEAR
@@ -23,7 +19,7 @@ EXTERN  ExitProcess@4:NEAR
 EXTERN  lstrlenA@4:NEAR
 EXTERN  WriteConsoleA@20:NEAR
 EXTERN  GetStdHandle@4:NEAR
-;äèðåêòèâû êîìïîíîâùèêó äëÿ ïîäêëþ÷åíèÿ áèáëèîòåê
+
 includelib c:\masm32\lib\user32.lib
 includelib c:\masm32\lib\kernel32.lib
 includelib c:\masm32\lib\ws2_32.lib
@@ -98,14 +94,14 @@ _DATA SEGMENT
 	BUF1 DB  100 DUP(0)
 	wsd  WSADATA <0>
 _DATA ENDS
-;ñåãìåíò êîäà
+
 _TEXT SEGMENT 
 START:
-;îïðäåëèòü äåñêðèïòîð êîíñîëè âûâîäà
+
 	PUSH STD_OUTPUT_HANDLE
 	CALL GetStdHandle@4
 	MOV  HANDL,EAX
-;àêòèâèçèðîâàòü áèáëèîòåêó ñîêåòîâ
+
 	PUSH OFFSET wsd
 	MOV  EAX,0
 	MOV  AX,0202H
@@ -116,7 +112,7 @@ START:
 	CALL ERRO
 	JMP  EXI
 NO_ER1:
-;îïðåäåëèòü àäðåñ ñåðâåðà (õîñòà) ïî åãî èìåíè
+
 	PUSH OFFSET comp
 	CALL gethostbyname@4
 	CMP  EAX,0
@@ -124,8 +120,8 @@ NO_ER1:
 	CALL ERRO
 	JMP  EXI
 NO_ER2:
-;âûâåñòè àäðåñ
-	MOV  EBX,[EAX+12];h_list â ñòðóêòóðå hostent
+
+	MOV  EBX,[EAX+12]
 	MOV  EDX,[EBX]
 	MOV  EDX,[EDX]
 	MOV  IPA,EDX 
@@ -153,8 +149,8 @@ NO_ER2:
 	MOV  EDX,IPA
 	MOV  sin2.sin_addr.s_un.s_addr,EDX
 	MOV  sin2.sin_port,2000	
-	MOV  sin2.sin_family,2 ;AF_INET 
-;ñîçäàòü ñîêåò
+	MOV  sin2.sin_family,2 
+
 	PUSH 0
 	PUSH 1  ;SOCK_STREAM	
 	PUSH 2  ;AF_INET
@@ -165,7 +161,7 @@ NO_ER2:
 	JMP  EXI	
 NO_ER3:
 	MOV  s1,EAX
-;ïîïûòêà ñîåäèíèòüñÿ ñ ñåðâåðîì
+
 	PUSH sizeof(sockaddr_in)		
 	PUSH OFFSET sin2
 	PUSH s1
@@ -175,21 +171,21 @@ NO_ER3:
 	CALL ERRO
 	JMP  CLOS	
 NO_ER4:
-;æäåì èíôîðìàöèþ
+
 	PUSH 0
 	PUSH 100
 	PUSH OFFSET buf
 	PUSH s1
-	CALL recv@16 ;â EAX - äëèíà ñîîáùåíèÿ
-;â íà÷àëå ïåðåêîäèðîâêà
+	CALL recv@16
+
 	PUSH OFFSET buf1
 	PUSH OFFSET buf
 	CALL CharToOemA@8
-;òåïåðü âûâîä
+
 	LEA  EAX,BUF1
 	MOV  EDI,1
 	CALL WRITE
-;ïîñûëàåì èíôîðìàöèþ
+
 	PUSH 0
 	PUSH OFFSET txt
 	CALL lstrlenA@4
@@ -207,7 +203,6 @@ NO_ER4:
 	PUSH OFFSET buf1
 	PUSH OFFSET buf
 	CALL CharToOemA@8
-;òåïåðü âûâîä
 ;	LEA  EAX,BUF1
 ;	MOV  EDI,1
 ;	CALL WRITE
@@ -215,14 +210,11 @@ CLOS:
 	PUSH S1
 	CALL closesocket@4
 EXI:
-;âûõîä ïðîèñõîäèò ïî çàâåðøåíèþ âñåõ ñëóæá
 	PUSH 0
  	CALL ExitProcess@4
-;âûâåñòè ñòðîêó (â êîíöå ïåðåâîä ñòðîêè) 
 ;EAX - íà íà÷àëî ñòðîêè      
 ;EDI - ñ ïåðåâîäîì ñòðîêè èëè áåç
 WRITE   PROC
-;ïîëó÷èòü äëèíó ïàðàìåòðà
 PUSH  EAX
 PUSH  EAX
 CALL  lstrlenA@4
@@ -230,13 +222,11 @@ MOV   ESI,EAX
 POP   EBX
 CMP   EDI,1
 JNE   NO_ENT 
-;â êîíöå - ïåðåâîä ñòðîêè
 MOV  BYTE PTR [EBX+ESI],13
 MOV  BYTE PTR [EBX+ESI+1],10
 MOV  BYTE PTR [EBX+ESI+2],0
 ADD  EAX,2
 NO_ENT:
-;âûâîä ñòðîêè
 PUSH 0
 PUSH OFFSET LENS
 PUSH EAX
@@ -245,7 +235,6 @@ PUSH HANDL
 CALL WriteConsoleA@20
 RET
 WRITE   ENDP
-;ïðîöåäóðà âûâîäà íîìåðà îøèáêè
 ERRO    PROC
 CALL GetLastError@0
 PUSH EAX
