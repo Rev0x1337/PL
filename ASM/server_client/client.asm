@@ -75,7 +75,6 @@ hostent ENDS
 
 ;-----------------------------------------------
 
-;ñåãìåíò äàííûõ
 _DATA SEGMENT 
 	HANDL DD ?
 	LENS  DD ?
